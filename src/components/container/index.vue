@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :style="containerStyle">
+  <div class="container" :id="`container-${index}`" :style="containerStyle">
     <canvas ref="containerCanvas" width="600" height="600"></canvas>
     <!-- <font-label :canvasContext="canvasContext" :text="'Sunny morinings'"></font-label> -->
   </div>
@@ -7,15 +7,17 @@
 
 <script>
   // import fontLabel from '../common/font-label'
-  import addLabel from '../../utils/font-effect'
+  import addElement from '../../utils/font-effect'
   export default {
-    props: ['backgroundColor', 'labelOptions' , 'effect'],
+    props: ['backgroundColor', 'text' , 'rect', 'index'],
     components: {
       // fontLabel
     },
     data() {
       return {
-        canvasContext: null 
+        canvasContext: null,
+        layer: null,
+        animate: null
       }
     },
     computed: {
@@ -25,9 +27,27 @@
         }
       }
     },
+    methods: {
+      async addEffect() {
+        this.canvasContext = this.$refs.containerCanvas.getContext('2d')
+        let result
+        if (this.rect) {
+          result = addElement(this.canvasContext, this.rect.effect, this.rect.options)
+          this.layer = result.layer
+          this.animate = result.animate
+          await this.animate.finished
+        }
+        result = addElement(this.canvasContext, this.text.effect, this.text.options, this.layer)
+        this.layer = result.layer
+        this.animate = result.animate
+        await this.animate.finished
+        this.layer = null
+        this.animate = null
+        this.addEffect()
+      }
+    },
     mounted() {
-      this.canvasContext = this.$refs.containerCanvas.getContext('2d')
-      addLabel(this.canvasContext, this.effect, this.labelOptions)
+      this.addEffect()
     }
   }
 </script>

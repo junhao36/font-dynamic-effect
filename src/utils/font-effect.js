@@ -3,19 +3,24 @@ import keyframes from './keyframes'
 
 const {Layer, Label, Sprite} = spritejs 
 
-const addLabel = (context, effect, options) => {
-  const label = new Label(options)
-  addAnimate(label, effect)
-  const layer = new Layer({context})
-  layer.append(label)
+const addElement = (context, effect, options, layer) => {
+  const element = options.text ? new Label(options) : new Sprite(options)
+  const animate = addAnimate(element, effect)
+  const _layer = layer || new Layer({context})
+  element.on('click', (evt) => {
+    element.attr('border', [4, 'blue']);
+  })
+  _layer.append(element)
+  return {layer: _layer, animate, element}
 }
 
 const addAnimate = (label, effect) => {
-  label.animate(keyframes[effect], {
-    duration: 1200,
-    iterations: Infinity,
+  const animate = label.animate(keyframes[effect], {
+    duration: 1000,
+    iterations: 1,
     easing: 'ease-in-out'
   })
+  return animate
 }
 
-export default addLabel
+export default addElement

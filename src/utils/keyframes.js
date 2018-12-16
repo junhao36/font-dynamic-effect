@@ -1,4 +1,4 @@
-export default {
+const keyframes = {
   fadeIn: [
     {opacity: 0},
     {opacity: 1}
@@ -72,5 +72,19 @@ export default {
     {scale: 1.1, rotate: '-3deg'},
     {scale: 1.1, rotate: '3deg'},
     {scale: 1, rotate: '0deg'}
+  ],
+  verticalDeployment: [
+    {height: 0},
+    {height:75}
+  ],
+  rotateHorizontalDeployment: [
+    {rotate: '0deg', width: 75},
+    {rotate: '-60deg', width: 75},
+    {rotate: '-120deg', width: 75},
+    {rotate: '-180deg', width: 75},
+    {rotate: '-180deg', width: 75},
+    {rotate: '-180deg', width: 520}
   ]
 }
+
+export default keyframes
